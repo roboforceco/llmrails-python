@@ -22,7 +22,7 @@ class Client:
     ) -> None:
         self.api_key = api_key or os.getenv("LLM_RAILS_API_KEY")
         self.timeout = timeout
-        self.api_url = 'http://0.0.0.0:5500/v1'
+        self.api_url = 'https://api.llmrails.com/v1'
         self.session = requests.Session()
         self.session.headers = {'X-API-KEY':self.api_key}
     
