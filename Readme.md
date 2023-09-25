@@ -31,7 +31,7 @@ To use this library, you must have an API key and specify it as a string when cr
 ```python
 import llmrails
 
-# initialize the Cohere Client with an API Key
+# initialize the LLMRails Client with an API Key
 rails = llmrails.Client('YOUR_API_KEY')
 
 # generate a prediction for a prompt

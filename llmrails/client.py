@@ -7,7 +7,7 @@ from llmrails.models import ModelChoices, Datastore, Embeddings
 
 
 class Client:
-    """Cohere Client
+    """LLMRails Client
 
     Args:
         api_key (str): Your API key.
@@ -20,7 +20,7 @@ class Client:
         api_key: str = None,
         timeout: int = 120,
     ) -> None:
-        self.api_key = api_key or os.getenv("LLM_RAILS_API_KEY")
+        self.api_key = api_key or os.getenv("LLMRAILS_API_KEY")
         self.timeout = timeout
         self.api_url = 'https://api.llmrails.com/v1'
         self.session = requests.Session()
