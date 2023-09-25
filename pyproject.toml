@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "llmrails"
+version = "0.1.0"
+description = "LLMRails SDK"
+authors = ["LLMRails"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "2.31.0"
+dacite = "1.8.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
