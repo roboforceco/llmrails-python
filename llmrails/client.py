@@ -2,8 +2,8 @@ import os
 import requests
 from typing import List
 from dacite import from_dict
-from llmrails.utils import raise_for_status
-from llmrails.models import ModelChoices, Datastore, Embeddings
+from llmrails.utils import raise_for_status, finfo
+from llmrails.models import ModelChoices, Datastore, Embeddings, SearchResults, ChatResult
 
 
 class Client:
@@ -27,11 +27,12 @@ class Client:
         self.session.headers = {'X-API-KEY':self.api_key}
     
 
-    def _request(self, endpoint: str, method: str, body=None):
+    def _request(self, endpoint: str, method: str, body=None, files=None):
         response = self.session.request(
             method,
             f"{self.api_url}{endpoint}",
             json=body,
+            files=files,
             timeout=self.timeout
         )
 
@@ -65,3 +66,45 @@ class Client:
         })
 
         return from_dict(data_class=Embeddings, data=response)
+
+
+    def upload_text(self, datastore_id: int, name: str, text: str):
+        self._request(f'/datastores/{datastore_id}/text', 'POST', body={
+            "name":name,
+            "text":text
+        })
+
+        return True
+    
+    
+    def upload_file(self, datastore_id, files: List[str]):
+        request_files = []
+
+        for file_name in files:
+            file = open(file_name, 'rb')
+            request_files.append(('file', (os.path.basename(file_name), file, finfo(file_name))))
+  
+        self._request(f'/datastores/{datastore_id}/file', 'POST', files=request_files)
+        return True
+        
+
+    def search(self, datastore_id: int, text: str, hybrid: bool = True, summarize: bool =  False):
+        response = self._request(f'/datastores/{datastore_id}/search', 'POST', body={
+            "text": text,
+            "hybrid":hybrid,
+            "summarize": summarize
+        })
+
+        return from_dict(data_class=SearchResults, data=response)
+    
+
+    def chat(self, app_id: str, query: str, session_id: str = None):
+        response = self._request(f'/chat/{app_id}', 'POST', body={
+            "stream":False,
+            "text":query,
+            "session_id": session_id
+        })
+
+        
+        return from_dict(data_class=ChatResult, data=response)
+

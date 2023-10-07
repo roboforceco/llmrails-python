@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Optional
 from dataclasses import dataclass
 
 class ModelChoices(str, Enum):
@@ -24,3 +24,31 @@ class Embeddings():
     data: List[Embedding]
     model: str
     usage: dict
+
+@dataclass
+class ItemMetadata():
+    type: str
+    url: str
+    name: str
+    score: float
+
+
+@dataclass
+class SearchResult():
+    text: str
+    metadata: ItemMetadata
+
+
+@dataclass
+class SearchResults():
+    results: List[SearchResult]
+    summarization: Optional[str] = None
+
+
+
+@dataclass
+class ChatResult():
+    id: str
+    text: str
+    session_id: str
+    docs: Optional[List[ItemMetadata]] = None

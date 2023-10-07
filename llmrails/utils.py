@@ -1,3 +1,4 @@
+import magic
 from requests import Response
 from requests.exceptions import HTTPError
 from llmrails.exceptions import RequestException
@@ -13,7 +14,6 @@ def get_error_message(response: Response):
         return response.reason
 
 
-
 def raise_for_status(response: Response):
     try:
         response.raise_for_status()
@@ -22,3 +22,7 @@ def raise_for_status(response: Response):
         raise RequestException(f"{response.status_code} Server Error: {err_msg} for url: {str(response.url)}")
     except Exception as e:
         raise e
+    
+
+def finfo(file):
+    return magic.from_file(file, mime=True)
